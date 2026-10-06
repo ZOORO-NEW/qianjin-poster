@@ -1,0 +1,9 @@
+# qianjin-poster · 发布排除规则
+# 字体与索引均为「本地缓存」，由 scripts/setup_fonts.py 生成，不进技能包。
+assets/fonts/
+*.ttf
+*.otf
+*.ttc
+__pycache__/
+*.pyc
+.DS_Store
