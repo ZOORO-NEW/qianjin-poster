@@ -2,7 +2,7 @@
 name: qianjin-poster
 description: 专业产品海报设计引擎（设计系统驱动）。当用户需要设计产品海报（促销/节假日/创意/分层悬浮解构/人物肖像/创意双关/新中式养生/国潮/极简科技）、需要从产品图片抠图并合成海报、需要提炼营销钩子式标题文案、添加企业 logo、要求多比例多风格输出，或需要生成可直接粘贴到元宝/即梦/豆包等 AI 生图平台的海报提示词时使用。内置设计系统（栅格/字阶/配色Token/构图/装饰）、免费商用字体规范与 PIL 排版合成引擎，确保商业可用、无版权风险。
 agent_created: true
-version: 2.6.0
+version: 2.6.1
 platforms: [workbuddy, claude-code, cursor, windsurf, codex, linux, macos, windows]
 slug: qianjin-poster
 displayName: 前进产品海报设计引擎
