@@ -306,9 +306,18 @@ def parse_product(spec):
     if "@" in spec:
         path, rest = spec.split("@", 1)
         parts = rest.split(",")
-        cx = float(parts[0]) if len(parts) > 0 else 0.5
-        cy = float(parts[1]) if len(parts) > 1 else 0.5
-        sc = float(parts[2]) if len(parts) > 2 else 0.55
+        try:
+            cx = float(parts[0]) if len(parts) > 0 else 0.5
+        except (ValueError, IndexError):
+            cx = 0.5
+        try:
+            cy = float(parts[1]) if len(parts) > 1 else 0.5
+        except (ValueError, IndexError):
+            cy = 0.5
+        try:
+            sc = float(parts[2]) if len(parts) > 2 else 0.55
+        except (ValueError, IndexError):
+            sc = 0.55
     else:
         path, cx, cy, sc = spec, 0.5, 0.5, 0.55
     return path.strip(), cx, cy, sc
@@ -500,7 +509,8 @@ def main():
     ap = argparse.ArgumentParser(description="qianjin-poster v2 设计引擎")
     ap.add_argument("--style", default="S1", choices=list(STYLES))
     ap.add_argument("--layout", default=None, choices=["L1", "L2", "L3", "L4", "L5"])
-    ap.add_argument("--product", action="append", default=[], help="path@cx,cy,scale")
+    ap.add_argument("--layer", action="append", default=[],
+                help="透明部件 PNG：path@cx,cy,scale（可多次）")
     ap.add_argument("--callout", action="append", default=[],
                     help="分层标签：文字@cx,cy,关联产品序号(从1起),方向(l|r),如 '航空铝中框@0.22,0.42,1,l'")
     ap.add_argument("--callout-style", default="leader",
@@ -607,7 +617,7 @@ def main():
         draw_block(ImageDraw.Draw(canvas), decor_block_xy, st["surface"])
 
     # 装饰：经络线（在放产品前画于底层）
-    if "meridian" in st["decor"] and args.product:
+    if "meridian" in st["decor"] and args.layer:
         pass  # 产品放置后补画
 
     # 产品放置（带阴影）
@@ -616,7 +626,7 @@ def main():
     prod_top = None
     prod_cx = None
     prod_geo = []          # [(img_rgba, shadow_rgba, left, top, tw, th, cx, cy)]
-    for spec in args.product:
+    for spec in args.layer:
         path, cx, cy, sc = parse_product(spec)
         if not os.path.exists(path):
             sys.stderr.write(f"[WARN] 产品图不存在：{path}\n")
@@ -648,7 +658,7 @@ def main():
         if g[2] is None:
             g[2] = int(g[6] * W - g[4] / 2) - (g[1].width - g[4]) // 2
 
-    if prod_geo and args.title:
+    if prod_geo:
         # 起点须与「眉标让位后的实际标题 y」一致 —— 角标在顶部时标题会下移到
         # corner_bottom+18，若仍按 H*0.10 估算会低估 50~80px，导致让位量不足
         _start = zones["title"][1]
@@ -661,7 +671,7 @@ def main():
                                  int(H * 0.06) + int(min(W, H) * _sfrac))
         if _corner_bottom and zones["title"][2] == "center" and _start < _corner_bottom:
             _start = _corner_bottom + int(18 * scale)
-        _need_bottom = int(_start) + _est
+        _need_bottom = int(_start) + (_est if args.title else 0)
         _pts_h = int(len([p for p in args.points.split("|") if p.strip()])
                      * 20 * scale * 1.6) if args.points else 0
         _room = H - int(24 * scale) - _pts_h
@@ -893,7 +903,7 @@ def main():
     if prod_top is not None and prod_bottom is not None:
         # 多产品：水平区间取并集（任一产品与文字重叠即判重叠），避免漏判上层元素
         lo_all, hi_all = None, None
-        for spec in args.product:
+        for spec in args.layer:
             p_, cx_, cy_, sc_ = parse_product(spec)
             if not os.path.exists(p_):
                 continue
