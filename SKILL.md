@@ -2,7 +2,7 @@
 name: qianjin-poster
 description: 专业产品海报设计引擎（设计系统驱动）。当用户需要设计产品海报（促销/节假日/创意/分层悬浮解构/人物肖像/创意双关/新中式养生/国潮/极简科技）、需要从产品图片抠图并合成海报、需要提炼营销钩子式标题文案、添加企业 logo、要求多比例多风格输出，或需要生成可直接粘贴到元宝/即梦/豆包等 AI 生图平台的海报提示词时使用。内置设计系统（栅格/字阶/配色Token/构图/装饰）、免费商用字体规范与 PIL 排版合成引擎，确保商业可用、无版权风险。
 agent_created: true
-version: 2.6.1
+version: 2.9.0
 platforms: [workbuddy, claude-code, cursor, windsurf, codex, linux, macos, windows]
 slug: qianjin-poster
 displayName: 前进产品海报设计引擎
@@ -10,7 +10,7 @@ license: MIT
 summary: 设计系统驱动的专业产品海报引擎，支持六类海报+七种风格+概念驱动提示词生成。
 ---
 
-# 前进产品海报设计引擎 · qianjin-poster v2.6.0
+# 前进产品海报设计引擎 · qianjin-poster v2.7.0
 
 > 面向商业落地的产品海报**设计系统**：不是"把图排上去"，而是先定 Concept，再用风格 Token、构图模式、装饰语言、字阶层级，产出设计师水准的海报。全程免费商用字体，零版权风险。
 
@@ -262,13 +262,19 @@ qianjin-poster/
 ├── references/
 │   ├── design-system.md          # 设计系统：栅格/字阶/配色Token/构图/装饰（地基）
 │   ├── color-system.md           # 配色系统 v2.3：诊断方法/五原则/七套Token/自检清单
+│   ├── guochao-food.md           # 国潮美食海报：字体坑位/配色/布局规范/错误对照
+│   ├── burger-minimal.md         # 极简商业美食海报：分层解构提示词/比例适配/文字规范
+│   ├── burger-brand.md           # 品牌广告版：笔刷标题生图法/暖氛围底图/信息矩阵/叠压层次
 │   ├── styles.md                 # 七种风格库（配色+字体+装饰+构图+文案调性）
 │   ├── copywriting.md            # 标题文案提炼（七类结构/Concept 咬合/反模板腔）
 │   ├── font-guide.md             # 免费商用字体清单与获取
 │   ├── poster-types.md           # 六类海报模板/配色/文案公式
 │   └── prompt-generator.md       # 海报提示词公式/平台适配/负面词
 ├── scripts/
-│   ├── compose_poster.py         # v2.6 设计引擎（配色+字阶+视觉轴+大留白+分层解构标签+角色取字）
+│   ├── compose_poster.py         # v2.7 设计引擎（配色+字阶+视觉轴+大留白+分层解构标签+角色取字）
+│   ├── compose_guochao_food.py   # 国潮美食海报合成器（书法大字+拼音+木牌+弧形木框卖点）
+│   ├── compose_burger.py        # 极简商业美食海报（标题+副标语+品牌名+比例适配）
+│   ├── compose_burger_v2.py     # 商业美食海报增强版（笔刷标题PNG+品牌信息矩阵+叠压层次）
 │   ├── fontlib.py                # 角色化字体引擎（字体目录/风格映射/索引/取字）
 │   ├── gen_prompt.py             # v2 概念驱动提示词生成器
 │   └── setup_fonts.py            # 扫描系统+下载OFL字体+生成 font_index.json
